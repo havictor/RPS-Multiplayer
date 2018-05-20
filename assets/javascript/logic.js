@@ -32,7 +32,5 @@ $("#grief").on("click", function(event) {
 var userSelection
 var enemySelection
 
-$(document).ready(function(){
-    var $textarea = $("#griefing");
-    $textarea.scrollTop($("#griefing").scrollHeight);
-});
+var textarea = document.getElementById("griefing");
+textarea.scrollTop = textarea.scrollHeight;
