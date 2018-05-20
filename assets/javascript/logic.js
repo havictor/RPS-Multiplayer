@@ -14,7 +14,7 @@ let username=$.trim(prompt("What is your name?"));
 
 database.ref().on("child_added", function(childsnapshot) {
   var previousText = $("#griefing").text();
-  $("#griefing").text(`${previousText} /n ${childsnapshot.val().username}: ${childsnapshot.val().message}`);
+  $("#griefing").text(`${previousText} \n ${childsnapshot.val().username}: ${childsnapshot.val().message}`);
 });
 
 $("#grief").on("click", function(event) {
