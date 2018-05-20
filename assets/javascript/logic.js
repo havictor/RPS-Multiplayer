@@ -34,5 +34,5 @@ var enemySelection
 
 $(document).ready(function(){
     var $textarea = $("#griefing");
-    $textarea.scrollTop($textarea[0].scrollHeight);
+    $textarea.scrollTop($textarea.scrollHeight);
 });
