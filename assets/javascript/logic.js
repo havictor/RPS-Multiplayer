@@ -32,7 +32,7 @@ $("#grief").on("click", function(event) {
 var userSelection
 var enemySelection
 
-$("#DMZ").on"("click", $(".choice"), function() {
+$("#DMZ").on("click", $(".choice"), function() {
   var userSelection=$(this.attr("choice"));
   //push choice to server
   //compare yours & enemy's choice via if statements (player 1 vs player 2?)
