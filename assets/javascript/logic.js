@@ -11,6 +11,7 @@
 let database=firebase.database();
 
 let username=$.trim(prompt("What is your name?"));
+$("#greeting).text("Welcome, "+username+"!")
 
 database.ref().on("child_added", function(childsnapshot) {
   var previousText = $("#griefing").text();
