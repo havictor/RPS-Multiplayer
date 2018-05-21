@@ -39,6 +39,6 @@ $("#DMZ").on("click", $(".choice"), function() {
   //declare winner in chat
 });
 
-$(document).ready(
+$(document).ready();
 var textarea = document.getElementById("griefing");
-textarea.scrollTop = textarea.scrollHeight);
+textarea.scrollTop = textarea.scrollHeight;
