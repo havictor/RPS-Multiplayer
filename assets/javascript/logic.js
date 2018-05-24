@@ -17,6 +17,17 @@ if (username === "") {
 }
 else $("#greeting").text("Welcome, "+username+"!");
 
+//create function to check ifplayer 1 or player 2 is free
+function checkOpen() {
+  database.ref().once("value") .then(function(snapshot) {
+  if (!snapshot.val("Player1").exists()) {
+    //set player to player1
+  }
+  else if (!snapshot.val("Player2").exists()) {
+    //set player to player2
+  }
+});
+
 database.ref().on("child_added", function(childsnapshot) {
   var previousText = $("#griefing").text();
   $("#griefing").text(`${previousText} \n ${childsnapshot.val().username}: ${childsnapshot.val().message}`);
@@ -29,19 +40,28 @@ $("#grief").on("click", function(event) {
     database.ref().push({
       username: username,
       message: message
-  })
-  $("#BM").val("");
+    })
+    $("#BM").val("");
   }
 });
+
+//announce changes in player taking a seat? database.ref().on("value")
 
 var userSelection
 var enemySelection
 
-$("#DMZ").on("click", $(".choice"), function() {
-  var userSelection=$(this.attr("choice"));
+$(".choice").on("click", function() {
+  if (userSelection === "") {
+    userSelection=$(this).attr("id");
+
+  
   //push choice to server
   //compare yours & enemy's choice via if statements (player 1 vs player 2?)
   //declare winner in chat
+  
+  
+  //need a promise where wait for enemySelecction, andthen reset
+  userSelection="";
 });
 
 $(document).ready();
