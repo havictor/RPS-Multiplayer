@@ -49,6 +49,12 @@ $("#seat").on("click", function() {
 //       message: "has left the game"
 //     })
 // })
+//
+database.ref("user").onDisconnect().update({
+  playerCount: playerCount--
+  
+})
+//
 
 function checkOpen() {
   database.ref("user").once("value").then(function(snapshot) {
@@ -101,7 +107,6 @@ $("#grief").on("click", function(event) {
   }
 });
 
-//database.onDisconnect
 
 var userSelection
 var enemySelection
