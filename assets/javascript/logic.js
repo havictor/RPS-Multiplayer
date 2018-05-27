@@ -20,6 +20,7 @@ if (username === "") {
 else $("#greeting").text("Welcome, "+username+"!");
 
 var player
+var playerCount
 
 $("#seat").on("click", function() {
   checkOpen();
@@ -51,30 +52,36 @@ $("#seat").on("click", function() {
 
 function checkOpen() {
   database.ref("user").once("value").then(function(snapshot) {
-  if ((snapshot.val().playerCount <= 0) && (player !== "Player 1") && (player !== "Player 2")) {
-    player = "Player 1"
-    database.ref("user").set({
+    playerCounter = database.ref("user").playerCount;
+    if ((snapshot.val().playerCount <= 0) && (player !== "Player 1") && (player !== "Player 2")) {
+      player = "Player 1"
       playerCount++
-      player1name: username
-    });
-    database.ref("chat").push({
-      username: player+" "+username,
-      message: " has entered the game"
-  }
-  else if ((snapshot.val().playerCount <= 1) && (player !== "Player 1") && (player !== "Player 2")) {
-    player ="Player 2"
-    database.set({
+      database.ref("user").set({
+        playerCount: playerCount
+        player1name: username
+      });
+      database.ref("chat").push({
+        username: player+" "+username,
+        message: " has entered the game"
+    }
+    else if ((snapshot.val().playerCount <= 1) && (player !== "Player 1") && (player !== "Player 2")) {
+      player ="Player 2"
       playerCount++
-      player2name: username
+      database.set({
+        playerCount: playerCount
+        player2name: username
+      });
+      database.ref("chat").push({
+        username: player+" "+username,
+        message: " has entered the game"
+      })
+    }
+    else if ((player == "Player 1") || (player == "Player 2")) {
+      alert("You already have a seat, stop trying to hog all the chairs!");
+    }
+    else alert("There are no free spots at the table");
     });
-    database.ref("chat").push({
-      username: player+" "+username,
-      message: " has entered the game"
-    })
   }
-  else alert("There are no free spots at the table");
-  });
-}
 
 database.ref("chat").on("child_added", function(childsnapshot) {
   var previousText = $("#griefing").text();
