@@ -63,7 +63,8 @@ function checkOpen() {
       database.ref("chat").push({
         username: player+" "+username,
         message: " has entered the game"
-    })
+      })
+    }
     else if ((snapshot.val().playerCount <= 1) && (player !== "Player 1") && (player !== "Player 2")) {
       player ="Player 2"
       playerCount++
@@ -80,8 +81,8 @@ function checkOpen() {
       alert("You already have a seat, stop trying to hog all the chairs!");
     }
     else alert("There are no free spots at the table");
-    });
-  }
+  });
+}
 
 database.ref("chat").on("child_added", function(childsnapshot) {
   var previousText = $("#griefing").text();
