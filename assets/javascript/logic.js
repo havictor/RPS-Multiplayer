@@ -57,7 +57,7 @@ function checkOpen() {
       player = "Player 1"
       playerCount++
       database.ref("user").set({
-        playerCount: playerCount
+        playerCount: playerCount,
         player1name: username
       });
       database.ref("chat").push({
@@ -68,7 +68,7 @@ function checkOpen() {
       player ="Player 2"
       playerCount++
       database.set({
-        playerCount: playerCount
+        playerCount: playerCount,
         player2name: username
       });
       database.ref("chat").push({
