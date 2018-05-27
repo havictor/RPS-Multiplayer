@@ -25,29 +25,29 @@ $("#seat").on("click", function() {
   checkOpen();
 });
 
-//
-database1.onDisconnect().update({
-  database.ref("user").update({
-    player1: false,
-    player1name: ""
-  })
-  database.ref("chat").push({
-    username: player+" "+username,
-    message: "has left the game"
-  })
-})
+// //
+// database1.onDisconnect().update({
+//   database.ref("user").update({
+//     player1: false,
+//     player1name: ""
+//   })
+//   database.ref("chat").push({
+//     username: player+" "+username,
+//     message: "has left the game"
+//   })
+// })
 
 
-database2.onDisconnect().update({
-    database.ref("user").update({
-      player2: false,
-      player2name: ""
-    })
-    database.ref("chat").push({
-      username: player+" "+username,
-      message: "has left the game"
-    })
-})
+// database2.onDisconnect().update({
+//     database.ref("user").update({
+//       player2: false,
+//       player2name: ""
+//     })
+//     database.ref("chat").push({
+//       username: player+" "+username,
+//       message: "has left the game"
+//     })
+// })
 
 function checkOpen() {
   database.ref("user").once("value").then(function(snapshot) {
