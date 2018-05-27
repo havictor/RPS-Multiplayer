@@ -56,7 +56,7 @@ function checkOpen() {
     if ((snapshot.val().playerCount <= 0) && (player !== "Player 1") && (player !== "Player 2")) {
       player = "Player 1"
       playerCount++
-      database.ref("user").set({
+      database.ref("user").update({
         playerCount: playerCount,
         player1name: username
       });
@@ -67,7 +67,7 @@ function checkOpen() {
     else if ((snapshot.val().playerCount <= 1) && (player !== "Player 1") && (player !== "Player 2")) {
       player ="Player 2"
       playerCount++
-      database.set({
+      database..ref("user").update({
         playerCount: playerCount,
         player2name: username
       });
