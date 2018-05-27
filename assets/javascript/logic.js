@@ -9,8 +9,8 @@
   firebase.initializeApp(config);
 
 let database=firebase.database();
-let database1=firebase.database().ref("player1");//
-let database2=firebase.database().ref("player2");//
+//let database1=firebase.database().ref("player1");//
+//let database2=firebase.database().ref("player2");//
 
 let username=$.trim(prompt("What is your name?"));
 
@@ -51,25 +51,26 @@ $("#seat").on("click", function() {
 
 function checkOpen() {
   database.ref("user").once("value").then(function(snapshot) {
-  if (snapshot.val().player1 != true) {
+  if ((snapshot.val().playerCount <= 0) && (player !== "Player 1") && (player !== "Player 2")) {
     player = "Player 1"
-    database.ref("user").push({
-      player1: true,
+    database.ref("user").set({
+      playerCount++
       player1name: username
     });
-    var previousText = $("#griefing").text();
-    $("#griefing").text(`${previousText} \n ${player} ${username} has entered the game`);
-    //set player to player1
+    database.ref("chat").push({
+      username: player+" "+username,
+      message: " has entered the game"
   }
-  else if (snapshot.val().player2 != true) {
+  else if ((snapshot.val().playerCount <= 1) && (player !== "Player 1") && (player !== "Player 2")) {
     player ="Player 2"
-    database.push({
-      player2: true,
+    database.set({
+      playerCount++
       player2name: username
     });
-    var previousText = $("#griefing").text();
-    $("#griefing").text(`${previousText} \n ${player} ${username} has entered the game`);
-    //set player to player2
+    database.ref("chat").push({
+      username: player+" "+username,
+      message: " has entered the game"
+    })
   }
   else alert("There are no free spots at the table");
   });
@@ -92,7 +93,7 @@ $("#grief").on("click", function(event) {
   }
 });
 
-database.onDisconnect
+//database.onDisconnect
 
 var userSelection
 var enemySelection
