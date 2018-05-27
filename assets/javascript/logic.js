@@ -52,7 +52,7 @@ $("#seat").on("click", function() {
 
 function checkOpen() {
   database.ref("user").once("value").then(function(snapshot) {
-    playerCount = database.ref("user").val().playerCount;
+    playerCount = snapshot.val().playerCount;
     if ((snapshot.val().playerCount <= 0) && (player !== "Player 1") && (player !== "Player 2")) {
       player = "Player 1"
       playerCount++
