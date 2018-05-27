@@ -63,7 +63,7 @@ function checkOpen() {
       database.ref("chat").push({
         username: player+" "+username,
         message: " has entered the game"
-    }
+    })
     else if ((snapshot.val().playerCount <= 1) && (player !== "Player 1") && (player !== "Player 2")) {
       player ="Player 2"
       playerCount++
