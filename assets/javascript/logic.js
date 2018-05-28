@@ -26,68 +26,69 @@ $("#seat").on("click", function() {
   checkOpen();
 });
 
-// //
-// database1.onDisconnect().update({
-//   database.ref("user").update({
-//     player1: false,
-//     player1name: ""
-//   })
-//   database.ref("chat").push({
-//     username: player+" "+username,
-//     message: "has left the game"
-//   })
-// })
+// var connect = database.ref("user");
+//   if (player = "Player 1") {
+//     connect.update({
+//       player1name: "",
 
-
-// database2.onDisconnect().update({
-//     database.ref("user").update({
-//       player2: false,
-//       player2name: ""
 //     })
-//     database.ref("chat").push({
-//       username: player+" "+username,
-//       message: "has left the game"
-//     })
-// })
-//
-database.ref("user").onDisconnect().update({
-  playerCount: playerCount--
+//   }
+//   connect.update({
+//     playerCount
+//   })
+//   playerCount: playerCount--
   
-})
-//
+// })
+// //
 
 function checkOpen() {
-  database.ref("user").once("value").then(function(snapshot) {
-    playerCount = snapshot.val().playerCount;
-    if ((snapshot.val().playerCount <= 0) && (player !== "Player 1") && (player !== "Player 2")) {
-      player = "Player 1"
-      playerCount++
-      database.ref("user").update({
-        playerCount: playerCount,
-        player1name: username
-      });
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: " has entered the game"
-      })
-    }
-    else if ((snapshot.val().playerCount <= 1) && (player !== "Player 1") && (player !== "Player 2")) {
-      player ="Player 2"
-      playerCount++
-      database.ref("user").update({
-        playerCount: playerCount,
-        player2name: username
-      });
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: " has entered the game"
-      })
-    }
-    else if ((player == "Player 1") || (player == "Player 2")) {
-      alert("You already have a seat, stop trying to hog all the chairs!");
-    }
-    else alert("There are no free spots at the table");
-  });
+  var connect = database.ref("user");
+  var chatConnect = database.ref("chat");
+    connect.once("value").then(function(snapshot) {
+      playerCount = snapshot.val().playerCount;
+      if ((snapshot.val().playerCount == 0) && (player !== "Player 1") && (player !== "Player 2")) {
+        player = "Player 1"
+        playerCount++
+        database.ref("user").update({
+          playerCount: playerCount,
+          player1name: username
+        });
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: " has entered the game"
+        })
+    //should reset ondisconnect
+    connect.onDisconnect().update({
+      playerCount: (playerCount-1),
+      player1name: ""
+    })
+    //var disconnectMessage = ref("chat").push()
+    chatConnect.onDisconnect().set({
+      username: player+" "+username,
+      message: " has left the game"
+    })
+      }
+      else if ((snapshot.val().playerCount == 1) && (player !== "Player 1") && (player !== "Player 2")) {
+        player ="Player 2"
+        playerCount++
+        database.ref("user").update({
+          playerCount: playerCount,
+          player2name: username
+        });
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: " has entered the game"
+        })
+        connect.onDisconnect().update({
+          playerCount: (playerCount-1),
+          player2name: ""
+        })
+      }
+      else if ((player == "Player 1") || (player == "Player 2")) {
+        alert("You already have a seat, stop trying to hog all the chairs!");
+      }
+      else alert("There are no free spots at the table");
+    });
 }
 
 database.ref("chat").on("child_added", function(childsnapshot) {
@@ -111,11 +112,25 @@ $("#grief").on("click", function(event) {
 var userSelection
 var enemySelection
 
+database.ref("game").on("value", function(snap) {
+  //change enemySelection
+})
+
 $(".choice").on("click", function() {
   if (userSelection === "") {
     userSelection=$(this).attr("id");
+    if (player == "Player 1") {
+      database.ref("game").update({
+        player1choice: userSelection
+      })
+      
+    }
+    else if (player == "Player 2") {
+      database.ref("game").update({
+        player2choice: userSelection
+      })
 
-  
+    }
   //push choice to server
   //compare yours & enemy's choice via if statements (player 1 vs player 2?)
   //declare winner in chat
@@ -126,6 +141,11 @@ $(".choice").on("click", function() {
   }
 });
 
+database.ref("user").on("value", function(snaps) {
+  playerCount=snaps.val().playerCount;
+})
+
+//need to fix autoscroll.
 $(document).ready();
 var textarea = document.getElementById("griefing");
 textarea.scrollTop = textarea.scrollHeight;
