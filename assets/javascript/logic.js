@@ -43,7 +43,7 @@ $("#seat").on("click", function() {
 
 function checkOpen() {
   var connect = database.ref("user");
-  var chatConnect = database.ref("chat");
+  //var chatConnect = database.ref("chat").push();
     connect.once("value").then(function(snapshot) {
       playerCount = snapshot.val().playerCount;
       if ((snapshot.val().playerCount == 0) && (player !== "Player 1") && (player !== "Player 2")) {
@@ -62,7 +62,7 @@ function checkOpen() {
       playerCount: (playerCount-1),
       player1name: ""
     })
-    //var disconnectMessage = ref("chat").push()
+    var chatConnect = database.ref("chat").push();
     chatConnect.onDisconnect().set({
       username: player+" "+username,
       message: " has left the game"
@@ -91,6 +91,7 @@ function checkOpen() {
     });
 }
 
+//make the colon a variable to prevent it from showing upon connect/disconnect
 database.ref("chat").on("child_added", function(childsnapshot) {
   var previousText = $("#griefing").text();
   $("#griefing").text(`${previousText} \n ${childsnapshot.val().username}: ${childsnapshot.val().message}`);
