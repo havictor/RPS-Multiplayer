@@ -29,81 +29,97 @@ $("#seat").on("click", function() {
 });
 
 var gameSelection = database.ref("/game");
-gameSelection.on("child_changed", function(childsnapshot) {
-  console.log("catch");
-  if (player == "Player 1") {
+
+gameSelection.child("player1").on("child_added", function(childsnapshot) {
+  if (player == "Player 2") {
     console.log("player2")
-    console.log(childsnapshot.child("player2").val().player2choice)
+    console.log(childsnapshot.val())//.player1choice);
+    enemySelection = childsnapshot.val()//.player1choice;
+    game();
+    //console.log(childsnapshot.child("/game/player2").val().player2choice)
     //console.log(database.ref("\/game\/player2").val().player2choice)
     //enemySelection = children.child("player2").val().player2choice
   }
-  else if (player == "Player 2") {
+})
+
+gameSelection.child("player2").on("child_added", function(childsnapshot) {
+  console.log("catch");
+  if (player == "Player 1") {
     console.log("player1")
-    console.log(childsnapshot.child("player1").val().player1choice)
+    console.log(childsnapshot.val())//.player2choice);
+    enemySelection = childsnapshot.val()//.player2choice;
+    game();
+    //console.log(childsnapshot.child("/game/player1").val().player1choice)
     //console.log(database.ref("\/game\/player1").val().player1choice)
     //enemySelection = children.child("player1").val().player1choice
   }
-  if (playerSelection == "scissors") {
-    if (enemySelection == "rock") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has lost using ${playerSelection}`
-      })
-    }
-    else if (enemySelection == "paper") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has won using ${playerSelection}`
-      })
-    }
-    else if (enemySelection == "scissors") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has drew using ${playerSelection}`
-      })
-    }
-  }
-  else if (playerSelection == "rock") {
-    if (enemySelection == "rock") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has drew using ${playerSelection}`
-      })
-    }
-    else if (enemySelection == "paper") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has lost using ${playerSelection}`
-      })
-    }
-    else if (enemySelection == "scissors") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has won using ${playerSelection}`
-      })
-    }
-  }
-  else if (playerSection == "paper") {
-    if (enemySelection == "rock") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has won using ${playerSelection}`
-      })
-    }
-    else if (enemySelection == "paper") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has drew using ${playerSelection}`
-      })
-    }
-    else if (enemySelection == "scissors") {
-      database.ref("chat").push({
-        username: player+" "+username,
-        message: `has lost using ${playerSelection}`
-      })
-    }
-  }
 })
+
+function game() {
+  if ((playerSelection != null) && (enemySelection != null)) {
+    if (playerSelection == "scissors") {
+      if (enemySelection == "rock") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has lost using ${playerSelection}`
+        })
+      }
+      else if (enemySelection == "paper") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has won using ${playerSelection}`
+        })
+      }
+      else if (enemySelection == "scissors") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has drew using ${playerSelection}`
+        })
+      }
+    }
+    else if (playerSelection == "rock") {
+      if (enemySelection == "rock") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has drew using ${playerSelection}`
+        })
+      }
+      else if (enemySelection == "paper") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has lost using ${playerSelection}`
+        })
+      }
+      else if (enemySelection == "scissors") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has won using ${playerSelection}`
+        })
+      }
+    }
+    else if (playerSection == "paper") {
+      if (enemySelection == "rock") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has won using ${playerSelection}`
+        })
+      }
+      else if (enemySelection == "paper") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has drew using ${playerSelection}`
+        })
+      }
+      else if (enemySelection == "scissors") {
+        database.ref("chat").push({
+          username: player+" "+username,
+          message: `has lost using ${playerSelection}`
+        })
+      }
+    }
+    reset();
+  }
+}
 
 function checkOpen() {
 var connect1 = database.ref("user");
@@ -131,6 +147,7 @@ var connect2 = database.ref("user");
       username: player+" "+username,
       message: " has left the game"
     })
+    database.ref("game").onDisconnect().remove()//
     }
     else if ((player2seat != false) && (player !== "Player 1") && (player !== "Player 2")) {
       player ="Player 2"
@@ -152,6 +169,7 @@ var connect2 = database.ref("user");
         username: player+" "+username,
         message: " has left the game"
       })
+      database.ref("game").onDisconnect().remove()//
     }
     else if ((player == "Player 1") || (player == "Player 2")) {
       alert("You already have a seat, stop trying to hog all the chairs!");
@@ -163,6 +181,7 @@ var connect2 = database.ref("user");
 function reset() {
   userSelection = "";
   enemySelection = "";
+  database.ref("game").remove();
 }
 
 //to do: make the colon a variable/if statement to prevent it from showing upon connect/disconnect messages
@@ -184,6 +203,9 @@ if (message != "") {
 });
 
 $(".choice").on("click", function() {
+  if ((player != "Player 1") && (player != "Player 2")) {
+    alert("You are not seated, please sit down to throw down");
+  }
   if ((userSelection == "") || (userSelection == undefined)) {
     userSelection=$(this).attr("id");
     if (player == "Player 1") {
@@ -193,7 +215,7 @@ $(".choice").on("click", function() {
     }
     else if (player == "Player 2") {
       database.ref("game\/player2").set({
-        player2choice: userSelection
+         player2choice: userSelection
       })
     }
   }
