@@ -2,3 +2,12 @@
   height: 35vh;
   resize: none;
 }
+
+img {
+  height: 100px;
+  width: 100px;
+}
+
+#seatContainer {
+  margin-top: 35px;
+}

@@ -32,7 +32,7 @@ var gameSelection = database.ref("/game");
 
 gameSelection.child("player1").on("child_added", function(childsnapshot) {
   if (player == "Player 2") {
-    enemySelection = childsnapshot.val().player1choice;
+    enemySelection = childsnapshot.val().player1choice; //localvariable enemySelection not changing upon child changed on server.
     game();
   }
 })
@@ -40,12 +40,14 @@ gameSelection.child("player1").on("child_added", function(childsnapshot) {
 gameSelection.child("player2").on("child_added", function(childsnapshot) {
   console.log("catch");
   if (player == "Player 1") {
-    enemySelection = childsnapshot.val().player2choice;
+    enemySelection = childsnapshot.val().player2choice; //localvariable enemySelection not changing upon child changed on server.
     game();
   }
 })
 
-//need to add child_remove to reset game if other player disconnects midgame
+//to do: need to add child_remove to reset game if other player disconnects midgame
+
+//to do: add function to standup on click to give up seat and trigger reset()
 
 
 function game() {
