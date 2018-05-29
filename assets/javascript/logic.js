@@ -20,7 +20,7 @@ else $("#greeting").text("Welcome, "+username+"!");
 var player
 var player1seat
 var player2seat
-var userSelection
+var playerSelection
 var enemySelection
 
 $("#seat").on("click", function() {
@@ -32,28 +32,21 @@ var gameSelection = database.ref("/game");
 
 gameSelection.child("player1").on("child_added", function(childsnapshot) {
   if (player == "Player 2") {
-    console.log("player2")
-    console.log(childsnapshot.val())//.player1choice);
-    enemySelection = childsnapshot.val()//.player1choice;
+    enemySelection = childsnapshot.val().player1choice;
     game();
-    //console.log(childsnapshot.child("/game/player2").val().player2choice)
-    //console.log(database.ref("\/game\/player2").val().player2choice)
-    //enemySelection = children.child("player2").val().player2choice
   }
 })
 
 gameSelection.child("player2").on("child_added", function(childsnapshot) {
   console.log("catch");
   if (player == "Player 1") {
-    console.log("player1")
-    console.log(childsnapshot.val())//.player2choice);
-    enemySelection = childsnapshot.val()//.player2choice;
+    enemySelection = childsnapshot.val().player2choice;
     game();
-    //console.log(childsnapshot.child("/game/player1").val().player1choice)
-    //console.log(database.ref("\/game\/player1").val().player1choice)
-    //enemySelection = children.child("player1").val().player1choice
   }
 })
+
+//need to add child_remove to reset game if other player disconnects midgame
+
 
 function game() {
   if ((playerSelection != null) && (enemySelection != null)) {
@@ -76,6 +69,7 @@ function game() {
           message: `has drew using ${playerSelection}`
         })
       }
+      reset();
     }
     else if (playerSelection == "rock") {
       if (enemySelection == "rock") {
@@ -96,6 +90,7 @@ function game() {
           message: `has won using ${playerSelection}`
         })
       }
+      reset();
     }
     else if (playerSection == "paper") {
       if (enemySelection == "rock") {
@@ -116,9 +111,11 @@ function game() {
           message: `has lost using ${playerSelection}`
         })
       }
+      reset();
     }
-    reset();
+    
   }
+  
 }
 
 function checkOpen() {
@@ -179,8 +176,8 @@ var connect2 = database.ref("user");
 }
 
 function reset() {
-  userSelection = "";
-  enemySelection = "";
+  playerSelection = null;
+  enemySelection = null;
   database.ref("game").remove();
 }
 
@@ -204,18 +201,18 @@ if (message != "") {
 
 $(".choice").on("click", function() {
   if ((player != "Player 1") && (player != "Player 2")) {
-    alert("You are not seated, please sit down to throw down");
+    alert("You are not seated; please sit down to throw down");
   }
-  if ((userSelection == "") || (userSelection == undefined)) {
-    userSelection=$(this).attr("id");
+  if ((playerSelection == "") || (playerSelection == undefined)) {
+    playerSelection=$(this).attr("id");
     if (player == "Player 1") {
       database.ref("game\/player1").set({
-        player1choice: userSelection
+        player1choice: playerSelection
       })
     }
     else if (player == "Player 2") {
       database.ref("game\/player2").set({
-         player2choice: userSelection
+         player2choice: playerSelection
       })
     }
   }
