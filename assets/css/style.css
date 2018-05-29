@@ -11,3 +11,7 @@ img {
 #seatContainer {
   margin-top: 35px;
 }
+
+#greeting {
+  font-size: 25px;
+}
