@@ -33,14 +33,14 @@ gameSelection.on("child_changed", function(childsnapshot) {
   console.log("catch");
   if (player == "Player 1") {
     console.log("player2")
-    //console.log(children.child("player2").val().player2choice)
-    console.log(database.ref("\/game\/player2").val().player2choice)
+    console.log(childsnapshot.child("player2").val().player2choice)
+    //console.log(database.ref("\/game\/player2").val().player2choice)
     //enemySelection = children.child("player2").val().player2choice
   }
   else if (player == "Player 2") {
     console.log("player1")
-    //console.log(children.child("player1").val().player1choice)
-    console.log(database.ref("\/game\/player1").val().player1choice)
+    console.log(childsnapshot.child("player1").val().player1choice)
+    //console.log(database.ref("\/game\/player1").val().player1choice)
     //enemySelection = children.child("player1").val().player1choice
   }
   if (playerSelection == "scissors") {
@@ -160,7 +160,12 @@ var connect2 = database.ref("user");
   });
 }
 
-//make the colon a variable to prevent it from showing upon connect/disconnect
+function reset() {
+  userSelection = "";
+  enemySelection = "";
+}
+
+//to do: make the colon a variable/if statement to prevent it from showing upon connect/disconnect messages
 database.ref("chat").on("child_added", function(childsnapshot) {
 var previousText = $("#griefing").text();
 $("#griefing").text(`${previousText} \n ${childsnapshot.val().username}: ${childsnapshot.val().message}`);
@@ -191,13 +196,6 @@ $(".choice").on("click", function() {
         player2choice: userSelection
       })
     }
-//push choice to server
-//compare yours & enemy's choice via if statements (player 1 vs player 2?)
-//declare winner in chat
-
-
-//need a promise where wait for enemySelecction, andthen reset
-//userSelection="";
   }
 });
 
